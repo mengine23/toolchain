@@ -1,0 +1,44 @@
+{
+  "variables": {
+    "guest_additions_mode": "attach",
+    "headless": "true",
+    "iso_checksum": "57faf4a2ea4484cfdf5e964c539313c061c4d9cac474e723d60405f2ea02d570",
+    "iso_checksum_type": "sha256",
+    "iso_url": "https://bwblob3740.blob.core.windows.net/iso/17763.253.190108-0006.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+        [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+        [ "modifyvm", "{{.Name}}", "--vram", "64" ],
+      ],
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_os_type": "Windows2016_64",
+      "headless": "{{ user `headless` }}",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "communicator": "winrm",
+      "winrm_username": "vagrant",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "12h",
+      "shutdown_command": "A:/99_reboot.bat",
+      "shutdown_timeout": "15m",
+      "floppy_files": [
+        "answer_files/Autounattend.xml",
+        "10_install/10_winrm.ps1",
+        "90_finalization/99_reboot.bat"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "win-2019-std-eng-{{.Provider}}.box",
+      "vagrantfile_template": "vagrantfile-windows.template"
+    }
+  ]
+}

@@ -23,7 +23,7 @@
       "communicator": "winrm",
       "winrm_username": "vagrant",
       "winrm_password": "vagrant",
-      "winrm_timeout": "12h",
+      "winrm_timeout": "2h",
       "shutdown_command": "A:/99_reboot.bat",
       "shutdown_timeout": "15m",
       "floppy_files": [
